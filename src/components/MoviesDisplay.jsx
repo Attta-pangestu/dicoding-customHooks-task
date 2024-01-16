@@ -1,23 +1,10 @@
-import React from "react";
 import PropTypes from 'prop-types';
 
-import { getMovies } from "../utils/api";
+import { useMovieList } from "../hooks/setHooks";
 
 function MoviesDisplay({modeDisplay}) {
-    const [movieList, setMovieList] = React.useState([]);
-    const [loading, setLoading] =React.useState(true);
-    
-    React.useEffect(() => {
-        getMovies().then( (movies) => {
-            setMovieList(movies);
-            setLoading(false);
-        });
-
-        return () => {
-            setLoading(true);
-        };
-    }, []);
-
+    const [movieList, loading] = useMovieList([]);
+    console.log(movieList);
     if(loading) {
         return (
             <div className="movies-list">
@@ -40,6 +27,28 @@ function MoviesDisplay({modeDisplay}) {
                     })
                 }
             </ul>
+        );
+    }
+
+    if(modeDisplay === 'grid') {
+        return (
+            <div className="movies-grid">
+                {
+                    movieList.map( movie => {
+                        return(
+                        <div key={movie.id} className="movies-grid-item">
+                            <img src={movie.poster} />
+                            <div className="movie-grid-item-info">
+                                <h1>{movie.title}</h1>
+                                <p>{movie.overview}</p>
+                            </div>
+                        </div>
+                        );
+                    })
+                
+                }
+            </div>
+            
         );
     }
 

@@ -1,14 +1,16 @@
 import './App.css'
 import React from 'react';
+
 // custom hooks
-import { useMode } from './hooks/setHooks';
+import { useMode} from './hooks/setHooks';
 
 // pages
-import MovieList from './components/MoviesDisplay';
+import MoviesDisplay from './components/MoviesDisplay';
 
 function App() {
   const [mode, setMode] = useMode('list');
   
+
   React.useEffect(()=> {
     console.log(mode);
   }, [mode]);
@@ -20,7 +22,7 @@ function App() {
           <option value="list">List Mode</option>
           <option value="grid">Grid Mode</option>
         </select>
-        {mode === 'list' ? <MovieList /> : <p>Ini grid</p>}
+        <MoviesDisplay modeDisplay={mode} />
       </main>
     </>
   )

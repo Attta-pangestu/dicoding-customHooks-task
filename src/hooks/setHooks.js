@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getMovies } from "../utils/api";
 
 function useMode(defaultVal) {
     const [mode, setMode] = useState(defaultVal);
@@ -11,14 +12,22 @@ function useMode(defaultVal) {
 }
 
 function useMovieList(defaultVal) {
-    const [movieList, setChange ] = useState(defaultVal);
-    
-    // ini tuh return callback
-    const setChangeHandler = (movies) => {
-        setChange(movies); 
-    }
+    const [movieList, setMovieList] = useState(defaultVal);
+    const [loading, setLoading] =useState(true);
 
-    return [movieList, setChangeHandler];
+    useEffect(() => {
+        getMovies().then( (movies) => {
+            setMovieList(movies);
+            setLoading(false);
+        });
+
+        return () => {
+            setLoading(true);
+        };
+    }, []);
+    
+
+    return [movieList, loading];
 }
 
 export {useMode, useMovieList};
